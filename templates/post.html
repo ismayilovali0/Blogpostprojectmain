@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load markdown_extras %}
 {% block content %}
+<head>
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
+          
+</head>
 
 <body class="bg-gray-100 font-sans leading-normal tracking-normal"> 
 
@@ -61,18 +69,6 @@
 			<div class="py-6">
 			{{ post.content | markdown | safe }}
 			</div>
-
-
-		
-
-		
-
-			<ol>
-				<li class="py-3">Maecenas accumsan lacus sit amet elementum porta. Aliquam eu libero lectus. Fusce vehicula dictum mi. In non dolor at sem ullamcorper venenatis ut sed dui. Ut ut est quam. Suspendisse quam quam, commodo sit amet placerat in, interdum a ipsum. Morbi sit amet tellus scelerisque tortor semper posuere.</li>
-				<li class="py-3">Morbi varius posuere blandit. Praesent gravida bibendum neque eget commodo. Duis auctor ornare mauris, eu accumsan odio viverra in. Proin sagittis maximus pharetra. Nullam lorem mauris, faucibus ut odio tempus, ultrices aliquet ex. Nam id quam eget ipsum luctus hendrerit. Ut eros magna, eleifend ac ornare vulputate, pretium nec felis.</li>
-				<li class="py-3">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc vitae pretium elit. Cras leo mauris, tristique in risus ac, tristique rutrum velit. Mauris accumsan tempor felis vitae gravida. Cras egestas convallis malesuada. Etiam ac ante id tortor vulputate pretium. Maecenas vel sapien suscipit, elementum odio et, consequat tellus.</li>
-			</ol>
-
 	
 
 
@@ -152,6 +148,148 @@
 			document.getElementById("nav-content").classList.toggle("hidden");
 		}
 	</script>
+	<!-- View Count & Interactions -->
+<div class="flex items-center space-x-6 mb-6 pb-4 border-b text-gray-600">
+    <span class="flex items-center">
+        <i class="far fa-eye mr-2"></i>
+        Views {{ post.view_count }}
+    </span>
+    
+    {% if user.is_authenticated %}
+        <!-- Like Button -->
+		<button onclick="toggleLike({{ post.pk }})" id="like-btn" 
+				class="like-btn {% if is_liked %}active{% endif %}">
+			<i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+			Like <span id="like-count">{{ like_count }}</span>
+		</button>
+
+        <!-- Favourite Button -->
+        <button onclick="toggleFavourite({{ post.pk }})" id="fav-btn"
+                class="fav-btn {% if is_favourited %}active{% endif %}">
+            <i class="{% if is_favourited %}fas{% else %}far{% endif %} fa-star"></i>
+            Favourite <span id="fav-count">{{ favourite_count }}</span>
+        </button>
+    {% else %}
+        <a href="{% url 'login' %}" class="text-blue-600 hover:underline">
+            Bəyənmək və şərh yazmaq üçün giriş edin
+        </a>
+    {% endif %}
+</div>
+<!-- Post Content -->
+
+<!-- Comments Section -->
+<div class="bg-white rounded-lg shadow-lg p-8 mt-8">
+    <h2 class="text-2xl font-bold mb-6">
+        <i class="far fa-comments mr-2"></i>
+        Şərhlər ({{ comments.count }})
+    </h2>
+
+    {% if user.is_authenticated %}
+        <!-- Add Comment Form -->
+        <form method="POST" action="{% url 'add_comment' post.pk %}" class="mb-8">
+            {% csrf_token %}
+            <textarea name="content" rows="4" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      placeholder="Şərhinizi yazın..."></textarea>
+            <button type="submit" 
+                    class="mt-3 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Şərh əlavə et
+            </button>
+        </form>
+    {% else %}
+        <div class="bg-blue-50 p-4 rounded-lg mb-8">
+            <p>Şərh yazmaq üçün <a href="{% url 'login' %}" class="text-blue-600 hover:underline">giriş edin</a></p>
+        </div>
+    {% endif %}
+
+    <!-- Comments List -->
+    <div class="space-y-6">
+        {% for comment in comments %}
+            <div class="comment-box">
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                        {{ comment.user.username|first|upper }}
+                    </div>
+                    <span class="font-semibold">{{ comment.user.username }}</span>
+                    <span class="text-gray-500 text-sm">{{ comment.created_at|timesince }} əvvəl</span>
+                </div>
+                <p class="text-gray-700 ml-10">{{ comment.content }}</p>
+            </div>
+        {% empty %}
+            <p class="text-gray-500 text-center py-8">Hələ heç bir şərh yoxdur.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+function toggleLike(postId) {
+    fetch(`/post/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const btn = document.getElementById('like-btn');
+        const icon = btn.querySelector('i');
+        const count = document.getElementById('like-count');
+        
+        if (data.liked) {
+            btn.classList.add('active');
+            icon.className = 'fas fa-heart';
+        } else {
+            btn.classList.remove('active');
+            icon.className = 'far fa-heart';
+        }
+        count.textContent = data.like_count;
+    });
+}
+
+function toggleFavourite(postId) {
+    fetch(`/post/${postId}/favourite/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const btn = document.getElementById('fav-btn');
+        const icon = btn.querySelector('i');
+        const count = document.getElementById('fav-count');
+        
+        if (data.favourited) {
+            btn.classList.add('active');
+            icon.className = 'fas fa-star';
+        } else {
+            btn.classList.remove('active');
+            icon.className = 'far fa-star';
+        }
+        count.textContent = data.favourite_count;
+    });
+}
+</script>
 
 <!-- </body> -->
 
