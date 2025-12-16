@@ -1,0 +1,53 @@
+<!-- tags_list.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taglər</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .tags-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .tag-item {
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .tag-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .tag-date {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tags-container">
+        <h1>Bütün Taglər</h1>
+        
+        {% if tags %}
+            {% for tag in tags %}
+                <div class="tag-item">
+                    <div class="tag-name">{{ tag.name }}</div>
+                    <div class="tag-date">Yaradılma tarixi: {{ tag.created_at|date:"d.m.Y H:i" }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Hələ heç bir tag əlavə edilməyib.</p>
+        {% endif %}
+        
+        <a href="{% url 'home' %}" style="display: inline-block; margin-top: 20px; color: #007bff;">← Ana səhifəyə qayıt</a>
+    </div>
+</body>
+</html>

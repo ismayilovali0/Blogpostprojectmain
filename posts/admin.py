@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import Post, Comment, Like, Favourite, About, Author, Category
+from .models import Post, Comment, Like, Favourite, About, Author, Category, Tag
+
 
 admin.site.register(Author)
 admin.site.register(Category)
+admin.site.register(Post)
 
 try:
     admin.site.unregister(Post)
@@ -13,6 +15,7 @@ except:
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'timestamp', 'view_count']  # timestamp istifadə edildi
     readonly_fields = ['view_count']
+    filter_horizontal = ['tags']
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -34,3 +37,9 @@ class FavouriteAdmin(admin.ModelAdmin):
 class AboutAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_active', 'created_at']
     list_filter = ['is_active', 'created_at']
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'created_at')
+    search_fields = ('name',)
+    readonly_fields = ('created_at',)

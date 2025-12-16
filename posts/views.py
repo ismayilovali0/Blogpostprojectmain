@@ -3,7 +3,8 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .models import Category, Post, Author, Like, Favourite, Comment, About
+from .models import Category, Post, Author, Like, Favourite, Comment, About, Tag
+
 
 
 def get_author(user):
@@ -250,3 +251,15 @@ def my_likes(request):
         'title': 'Bəyəndiklərim'
     }
     return render(request, 'my_likes.html', context)
+
+def tags_list(request):
+    tags = Tag.objects.all()
+    context = {
+        'tags': tags
+    }
+    return render(request, 'tags_list.html', context)
+
+def tag_posts(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    posts = tag.posts.all()
+    return render(request, 'blog/tag_posts.html', {'tag': tag, 'posts': posts})

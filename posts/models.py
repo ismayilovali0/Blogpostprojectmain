@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 User = get_user_model()
 
@@ -29,7 +30,8 @@ class Post(models.Model):
     thumbnail = models.ImageField()
     categories = models.ManyToManyField(Category)
     featured = models.BooleanField()
-    view_count = models.IntegerField(default=0)  # ← YENİ ƏLAVƏ
+    view_count = models.IntegerField(default=0)
+    tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
     
     def __str__(self):
         return self.title
@@ -70,3 +72,15 @@ class About(models.Model):
     
     def __str__(self):
         return self.title
+
+class Tag(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+
+    def __str__(self):
+        return self.name

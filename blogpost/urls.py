@@ -21,7 +21,7 @@ urlpatterns = [
     path('post/<int:pk>/like/', toggle_like, name='toggle_like'),
     path('post/<int:pk>/favourite/', toggle_favourite, name='toggle_favourite'),
     path('post/<int:pk>/comment/', add_comment, name='add_comment'),
-    path('about-page/', about_view, name='about_page'),  # about artıq var, ona görə about_page
+    path('about-page/', about_view, name='about_page'),
 ]
 
 if settings.DEBUG:

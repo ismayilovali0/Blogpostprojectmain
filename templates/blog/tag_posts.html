@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tag.name }} - Postlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <a href="{% url 'tags_list' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6">
+            <i class="fas fa-arrow-left mr-2"></i> Bütün taqlara qayıt
+        </a>
+
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-tag text-purple-600 mr-2"></i>
+                {{ tag.name }}
+            </h1>
+            <p class="text-gray-600">{{ posts.count }} post tapıldı</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for post in posts %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">
+                        <a href="{% url 'post_detail' post.pk %}" class="hover:text-blue-600">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    <p class="text-gray-600 mb-4">{{ post.content|truncatewords:20|safe }}</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span><i class="far fa-calendar mr-1"></i> {{ post.timestamp|date:"d M, Y" }}</span>
+                        <span><i class="far fa-eye mr-1"></i> {{ post.view_count }} oxunma</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-2 text-center py-12">
+                <p class="text-gray-500 text-lg">Bu tag üçün post tapılmadı.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
