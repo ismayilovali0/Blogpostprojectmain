@@ -11,17 +11,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage, name='homepage'),
     path('post/<slug>/', post, name='post'),
-    path('about/', about, name='about'),
+    path('about/', about_view, name='about'),
     path('search/', search, name='search'),
     path('postlist/<slug>/', postlist, name='postlist'), 
     path('posts/', allposts, name='allposts'),
-    
-    # Yeni funksiyalar
     path('post/<int:pk>/detail/', post_detail, name='post_detail'),
     path('post/<int:pk>/like/', toggle_like, name='toggle_like'),
     path('post/<int:pk>/favourite/', toggle_favourite, name='toggle_favourite'),
     path('post/<int:pk>/comment/', add_comment, name='add_comment'),
-    path('about-page/', about_view, name='about_page'),
 ]
 
 if settings.DEBUG:

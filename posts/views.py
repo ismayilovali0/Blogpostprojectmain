@@ -62,7 +62,6 @@ def post(request, slug):
 
 
 def about(request):
-    """About page view"""
     return render(request, 'about_page.html')
 
 
@@ -222,7 +221,7 @@ def about_view(request):
     context = {
         'about': about_content
     }
-    return render(request, 'about.html', context)
+    return render(request, 'about_page.html', context)
 
 
 # Optional: User's favourite posts view
