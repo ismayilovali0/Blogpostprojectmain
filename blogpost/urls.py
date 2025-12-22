@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include  # include əlavə edildi
+from django.urls import path, include
 from posts.views import (
     homepage, post, about, search, postlist, allposts,
     post_detail, toggle_like, toggle_favourite, add_comment, about_view
@@ -19,6 +19,7 @@ urlpatterns = [
     path('post/<int:pk>/like/', toggle_like, name='toggle_like'),
     path('post/<int:pk>/favourite/', toggle_favourite, name='toggle_favourite'),
     path('post/<int:pk>/comment/', add_comment, name='add_comment'),
+    
 ]
 
 if settings.DEBUG:
