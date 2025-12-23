@@ -1,283 +1,269 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load markdown_extras %}
+
 {% block content %}
 <head>
-    <link rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
-          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" />
-          
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
 </head>
 
-<body class="bg-gray-100 font-sans leading-normal tracking-normal"> 
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- Progress Bar -->
+    <div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
 
-
-		<div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
-
-		<div class="w-full md:max-w-4xl mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
-
-			<div class="pl-4">
-				<a class="text-gray-900 text-base no-underline hover:no-underline font-extrabold text-xl" href="{% url 'allposts' %}">
-					🔙Back all posts
-				</a>
-			</div>
-
-			<div class="block lg:hidden pr-4">
-				<button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-900 hover:border-green-500 appearance-none focus:outline-none">
-					<svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-						<title>Menu</title>
-						<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-					</svg>
-				</button>
-			</div>
-            
-			<div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-100 md:bg-transparent z-20" id="nav-content">
-				<ul class="list-reset lg:flex justify-end flex-1 items-center">
-                    <!--
-					<li class="mr-3">
-						<a class="inline-block py-2 px-4 text-gray-900 font-bold no-underline" href="">Active</a>
-					</li>
-					<li class="mr-3">
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-2 px-4" href="#">link</a>
-					</li>
-					<li class="mr-3">
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-2 px-4" href="#">link</a>
-					</li>
-                    -->
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<!--Container-->
-	<div class="container w-full md:max-w-3xl mx-auto pt-20">
-
-		<div class="w-full px-4 md:px-6 text-xl text-gray-800 leading-normal" style="font-family:Georgia,serif;">
-
-			<!--Title-->
-			<div class="font-sans">
-						<h1 class="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">
-						{{ post.title }}</h1>
-						<p class="text-sm md:text-base font-normal text-gray-600">
-						{{ obj.timestamp}}</p>
-						<img class="h-40 rounded w-full object-cover object-center mb-6" src="{{ post.thumbnail.url }}" alt="content">
-			</div>
-
-			<!--Post Content-->
-			<div class="py-6">
-			{{ post.content | markdown | safe }}
-			</div>
-		</div>
-
-		
-
-		<!--Divider-->
-		<hr class="border-b-2 border-gray-400 mb-8 mx-4">
-
-
-
-		<!--Author-->
-		<div class="flex w-full items-center font-sans px-4 py-12">
-			<img class="w-10 h-10 rounded-full mr-4" src="{{ post.author.profile_picture.url }}">
-			<div class="flex-1 px-2">
-				<p class="text-base font-bold text-base md:text-xl leading-none mb-2">
-				{{ post.author }}</p>
-		
-			</div>
-			
-		</div>
-
-		<!--Divider-->
-		<hr class="border-b-2 border-gray-400 mb-8 mx-4">
-
-	</div>
-	<script>
-		/* Progress bar */
-		//Source: https://alligator.io/js/progress-bar-javascript-css-variables/
-		var h = document.documentElement,
-			b = document.body,
-			st = 'scrollTop',
-			sh = 'scrollHeight',
-			progress = document.querySelector('#progress'),
-			scroll;
-		var scrollpos = window.scrollY;
-		var header = document.getElementById("header");
-		var navcontent = document.getElementById("nav-content");
-
-		document.addEventListener('scroll', function() {
-
-			/*Refresh scroll % width*/
-			scroll = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
-			progress.style.setProperty('--scroll', scroll + '%');
-
-			/*Apply classes for slide in bar*/
-			scrollpos = window.scrollY;
-
-			if (scrollpos > 10) {
-				header.classList.add("bg-white");
-				header.classList.add("shadow");
-				navcontent.classList.remove("bg-gray-100");
-				navcontent.classList.add("bg-white");
-			} else {
-				header.classList.remove("bg-white");
-				header.classList.remove("shadow");
-				navcontent.classList.remove("bg-white");
-				navcontent.classList.add("bg-gray-100");
-
-			}
-
-		});
-
-
-		//Javascript to toggle the menu
-		document.getElementById('nav-toggle').onclick = function() {
-			document.getElementById("nav-content").classList.toggle("hidden");
-		}
-	</script>
-	<!-- View Count & Interactions -->
-<div class="flex items-center space-x-6 mb-6 pb-4 border-b text-gray-600">
-    <span class="flex items-center">
-        <i class="far fa-eye mr-2"></i>
-        Views {{ post.view_count }}
-    </span>
-    
-    {% if user.is_authenticated %}
-        <!-- Like Button -->
-		<button onclick="toggleLike({{ post.pk }})" id="like-btn" 
-				class="like-btn {% if is_liked %}active{% endif %}">
-			<i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
-			Like <span id="like-count">{{ like_count }}</span>
-		</button>
-
-        <!-- Favourite Button -->
-        <button onclick="toggleFavourite({{ post.pk }})" id="fav-btn"
-                class="fav-btn {% if is_favourited %}active{% endif %}">
-            <i class="{% if is_favourited %}fas{% else %}far{% endif %} fa-star"></i>
-            Favourite <span id="fav-count">{{ favourite_count }}</span>
-        </button>
-    {% else %}
-        <a href="{% url 'login' %}" class="text-blue-600 hover:underline">
-            Bəyənmək və şərh yazmaq üçün giriş edin
-        </a>
-    {% endif %}
-</div>
-<!-- Post Content -->
-
-<!-- Comments Section -->
-<div class="bg-white rounded-lg shadow-lg p-8 mt-8">
-    <h2 class="text-2xl font-bold mb-6">
-        <i class="far fa-comments mr-2"></i>
-        Şərhlər ({{ comments.count }})
-    </h2>
-
-    {% if user.is_authenticated %}
-        <!-- Add Comment Form -->
-        <form method="POST" action="{% url 'add_comment' post.pk %}" class="mb-8">
-            {% csrf_token %}
-            <textarea name="content" rows="4" required
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      placeholder="Şərhinizi yazın..."></textarea>
-            <button type="submit" 
-                    class="mt-3 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Şərh əlavə et
-            </button>
-        </form>
-    {% else %}
-        <div class="bg-blue-50 p-4 rounded-lg mb-8">
-            <p>Şərh yazmaq üçün <a href="{% url 'login' %}" class="text-blue-600 hover:underline">giriş edin</a></p>
+    <!-- Navigation -->
+    <nav class="w-full md:max-w-4xl mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
+        <div class="pl-4">
+            <a class="text-gray-900 text-base no-underline hover:no-underline font-extrabold text-xl" 
+               href="{% url 'allposts' %}">
+                🔙 Bütün postlara qayıt
+            </a>
         </div>
-    {% endif %}
 
-    <!-- Comments List -->
-    <div class="space-y-6">
-        {% for comment in comments %}
-            <div class="comment-box">
-                <div class="flex items-center space-x-2 mb-2">
-                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                        {{ comment.user.username|first|upper }}
-                    </div>
-                    <span class="font-semibold">{{ comment.user.username }}</span>
-                    <span class="text-gray-500 text-sm">{{ comment.created_at|timesince }} əvvəl</span>
-                </div>
-                <p class="text-gray-700 ml-10">{{ comment.content }}</p>
+        <button id="nav-toggle" 
+                class="block lg:hidden pr-4 flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-900 hover:border-green-500 appearance-none focus:outline-none">
+            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <title>Menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+            </svg>
+        </button>
+
+        <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-100 md:bg-transparent z-20" 
+             id="nav-content">
+            <ul class="list-reset lg:flex justify-end flex-1 items-center"></ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container w-full md:max-w-3xl mx-auto px-4">
+        <!-- Post Content -->
+        <article class="w-full md:px-6 text-xl text-gray-800 leading-normal" style="font-family:Georgia,serif;">
+            <!-- Post Header -->
+            <header class="font-sans mb-8">
+                <h1 class="text-4xl font-bold mb-4">{{ post.title }}</h1>
+                <p class="text-gray-600 mb-4">{{ post.timestamp }}</p>
+                {% if post.thumbnail %}
+                    <img class="post-image w-full rounded-lg shadow-lg" 
+                         src="{{ post.thumbnail.url }}" 
+                         alt="{{ post.title }}">
+                {% endif %}
+            </header>
+
+            <!-- Post Body -->
+            <div class="prose max-w-none mb-8">
+                {{ post.content | markdown | safe }}
             </div>
-        {% empty %}
-            <p class="text-gray-500 text-center py-8">Hələ heç bir şərh yoxdur.</p>
-        {% endfor %}
-    </div>
-</div>
+        </article>
 
-<!-- JavaScript -->
-<script>
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+        <hr class="border-b-2 border-gray-400 mb-8">
+
+        <!-- Author Info -->
+        <div class="flex w-full items-center font-sans py-12">
+            {% if post.author.profile_picture %}
+                <img class="profile-image" 
+                     src="{{ post.author.profile_picture.url }}"
+                     alt="{{ post.author.username }}">
+            {% endif %}
+            <div class="flex-1 px-4">
+                <p class="font-semibold text-lg">{{ post.author }}</p> 
+            </div>
+        </div>
+
+        <hr class="border-b-2 border-gray-400 mb-8">
+
+        <!-- View Count & Interactions -->
+        <div class="flex items-center space-x-6 mb-6 pb-4 border-b text-gray-600">
+            <span class="flex items-center">
+                <i class="far fa-eye mr-2"></i>
+                <span>{{ post.view_count }} baxış</span>
+            </span>
+
+            {% if user.is_authenticated %}
+                <!-- Like Button -->
+                <button onclick="toggleLike({{ post.pk }})" 
+                        id="like-btn" 
+                        class="like-btn flex items-center space-x-2 px-4 py-2 rounded-lg transition {% if is_liked %}active{% endif %}">
+                    <i class="{% if is_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+                    <span>Bəyən <span id="like-count">{{ like_count }}</span></span>
+                </button>
+
+                <!-- Favourite Button -->
+                <button onclick="toggleFavourite({{ post.pk }})" 
+                        id="fav-btn"
+                        class="fav-btn flex items-center space-x-2 px-4 py-2 rounded-lg transition {% if is_favourited %}active{% endif %}">
+                    <i class="{% if is_favourited %}fas{% else %}far{% endif %} fa-star"></i>
+                    <span>Favori <span id="fav-count">{{ favourite_count }}</span></span>
+                </button>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-blue-600 hover:underline">
+                    Bəyənmək və şərh yazmaq üçün giriş edin
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Comments Section -->
+        <section class="bg-white rounded-lg shadow-lg p-8 mt-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="far fa-comments mr-2"></i>
+                Şərhlər ({{ comments.count }})
+            </h2>
+
+            {% if user.is_authenticated %}
+                <!-- Add Comment Form -->
+                <form method="POST" action="{% url 'add_comment' post.pk %}" class="mb-8">
+                    {% csrf_token %}
+                    <textarea name="content" 
+                              rows="4" 
+                              required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                              placeholder="Şərhinizi yazın..."></textarea>
+                    <button type="submit" 
+                            class="mt-3 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Şərh əlavə et
+                    </button>
+                </form>
+            {% else %}
+                <div class="bg-blue-50 p-4 rounded-lg mb-8">
+                    <p>Şərh yazmaq üçün 
+                        <a href="{% url 'login' %}" class="text-blue-600 hover:underline font-semibold">
+                            giriş edin
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+
+            <!-- Comments List -->
+            <div class="space-y-6">
+                {% for comment in comments %}
+                    <div class="comment-box bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                                {{ comment.user.username|first|upper }}
+                            </div>
+                            <span class="font-semibold">{{ comment.user.username }}</span>
+                            <span class="text-gray-500 text-sm">{{ comment.created_at|timesince }} əvvəl</span>
+                        </div>
+                        <p class="text-gray-700 ml-10">{{ comment.content }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-gray-500 text-center py-8">Hələ heç bir şərh yoxdur.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Progress Bar
+        const h = document.documentElement;
+        const b = document.body;
+        const st = 'scrollTop';
+        const sh = 'scrollHeight';
+        const progress = document.querySelector('#progress');
+        const header = document.getElementById("header");
+        const navcontent = document.getElementById("nav-content");
+
+        document.addEventListener('scroll', function() {
+            // Update progress bar
+            const scroll = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+            progress.style.setProperty('--scroll', scroll + '%');
+
+            // Toggle header style on scroll
+            const scrollpos = window.scrollY;
+            if (scrollpos > 10) {
+                header?.classList.add("bg-white", "shadow");
+                navcontent?.classList.remove("bg-gray-100");
+                navcontent?.classList.add("bg-white");
+            } else {
+                header?.classList.remove("bg-white", "shadow");
+                navcontent?.classList.remove("bg-white");
+                navcontent?.classList.add("bg-gray-100");
+            }
+        });
+
+        // Mobile menu toggle
+        document.getElementById('nav-toggle')?.addEventListener('click', function() {
+            document.getElementById("nav-content")?.classList.toggle("hidden");
+        });
+
+        // CSRF Token Helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // Toggle Like
+        async function toggleLike(postId) {
+            try {
+                const response = await fetch(`/post/${postId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                const btn = document.getElementById('like-btn');
+                const icon = btn.querySelector('i');
+                const count = document.getElementById('like-count');
+                
+                if (data.liked) {
+                    btn.classList.add('active');
+                    icon.className = 'fas fa-heart';
+                } else {
+                    btn.classList.remove('active');
+                    icon.className = 'far fa-heart';
+                }
+                count.textContent = data.like_count;
+            } catch (error) {
+                console.error('Error toggling like:', error);
             }
         }
-    }
-    return cookieValue;
-}
 
-const csrftoken = getCookie('csrftoken');
-
-function toggleLike(postId) {
-    fetch(`/post/${postId}/like/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const btn = document.getElementById('like-btn');
-        const icon = btn.querySelector('i');
-        const count = document.getElementById('like-count');
-        
-        if (data.liked) {
-            btn.classList.add('active');
-            icon.className = 'fas fa-heart';
-        } else {
-            btn.classList.remove('active');
-            icon.className = 'far fa-heart';
+        // Toggle Favourite
+        async function toggleFavourite(postId) {
+            try {
+                const response = await fetch(`/post/${postId}/favourite/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                const btn = document.getElementById('fav-btn');
+                const icon = btn.querySelector('i');
+                const count = document.getElementById('fav-count');
+                
+                if (data.favourited) {
+                    btn.classList.add('active');
+                    icon.className = 'fas fa-star';
+                } else {
+                    btn.classList.remove('active');
+                    icon.className = 'far fa-star';
+                }
+                count.textContent = data.favourite_count;
+            } catch (error) {
+                console.error('Error toggling favourite:', error);
+            }
         }
-        count.textContent = data.like_count;
-    });
-}
-
-function toggleFavourite(postId) {
-    fetch(`/post/${postId}/favourite/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken,
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const btn = document.getElementById('fav-btn');
-        const icon = btn.querySelector('i');
-        const count = document.getElementById('fav-count');
-        
-        if (data.favourited) {
-            btn.classList.add('active');
-            icon.className = 'fas fa-star';
-        } else {
-            btn.classList.remove('active');
-            icon.className = 'far fa-star';
-        }
-        count.textContent = data.favourite_count;
-    });
-}
-</script>
-
-<!-- </body> -->
-
+    </script>
+</body>
 {% endblock content %}

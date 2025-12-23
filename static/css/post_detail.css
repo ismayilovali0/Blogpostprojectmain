@@ -1,0 +1,418 @@
+/* ===================================
+   Post Detail Page Styles
+   =================================== */
+
+/* Root Variables */
+:root {
+    --primary-color: #4dc0b5;
+    --secondary-color: #3b82f6;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --success-color: #10b981;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --bg-light: #f3f4f6;
+    --border-color: #e5e7eb;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Progress Bar */
+#progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    z-index: 9999;
+    background: linear-gradient(to right, var(--primary-color) var(--scroll), transparent 0);
+    transition: var(--transition);
+}
+
+/* Navigation Styles */
+nav {
+    transition: var(--transition);
+}
+
+nav.bg-white {
+    background-color: white;
+}
+
+nav.shadow {
+    box-shadow: var(--shadow-md);
+}
+
+#nav-toggle {
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#nav-toggle:hover {
+    border-color: var(--primary-color);
+}
+
+/* Post Image */
+.post-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    margin: 2rem 0;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.post-image:hover {
+    transform: scale(1.02);
+}
+
+/* Author Profile */
+.profile-image {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.profile-image:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Article Content */
+article {
+    line-height: 1.8;
+}
+
+article h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+article h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+article h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+article p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+
+article ul,
+article ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+article li {
+    margin-bottom: 0.5rem;
+}
+
+article a {
+    color: var(--secondary-color);
+    text-decoration: underline;
+    transition: var(--transition);
+}
+
+article a:hover {
+    color: var(--primary-color);
+}
+
+article blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+    background-color: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+article code {
+    background-color: #f1f5f9;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #e11d48;
+}
+
+article pre {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+article pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* Like & Favourite Buttons */
+.like-btn,
+.fav-btn {
+    background-color: white;
+    border: 2px solid var(--border-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.like-btn:hover {
+    background-color: #fee2e2;
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.like-btn.active {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+.like-btn.active:hover {
+    background-color: #dc2626;
+}
+
+.fav-btn:hover {
+    background-color: #fef3c7;
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+}
+
+.fav-btn.active {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: white;
+}
+
+.fav-btn.active:hover {
+    background-color: #d97706;
+}
+
+.like-btn i,
+.fav-btn i {
+    font-size: 1.1rem;
+}
+
+/* Comments Section */
+.comment-box {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.comment-box:hover {
+    background-color: white;
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+/* Comment Form */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Buttons */
+button[type="submit"] {
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* View Count */
+.flex.items-center.space-x-6 span {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.flex.items-center.space-x-6 i {
+    font-size: 1.1rem;
+}
+
+/* Dividers */
+hr {
+    opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    article h1 {
+        font-size: 2rem;
+    }
+
+    article h2 {
+        font-size: 1.5rem;
+    }
+
+    article h3 {
+        font-size: 1.25rem;
+    }
+
+    .post-image {
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+
+    .profile-image {
+        width: 48px;
+        height: 48px;
+    }
+
+    .like-btn,
+    .fav-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .comment-box {
+        padding: 1rem;
+    }
+
+    .flex.items-center.space-x-6 {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    article h1 {
+        font-size: 1.75rem;
+    }
+
+    .like-btn span,
+    .fav-btn span {
+        display: none;
+    }
+
+    .like-btn i,
+    .fav-btn i {
+        margin: 0;
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection */
+::selection {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Focus Styles */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+button:focus,
+a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(77, 192, 181, 0.3);
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Print Styles */
+@media print {
+    #progress,
+    nav,
+    .like-btn,
+    .fav-btn,
+    button,
+    .comment-box form {
+        display: none !important;
+    }
+
+    article {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+
+    .post-image {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+}

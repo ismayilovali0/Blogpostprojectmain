@@ -13,7 +13,7 @@ except:
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'timestamp', 'view_count']  # timestamp istifadə edildi
+    list_display = ['title', 'author', 'timestamp', 'view_count'] 
     readonly_fields = ['view_count']
     filter_horizontal = ['tags']
 

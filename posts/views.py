@@ -34,14 +34,6 @@ def post(request, slug):
     post = get_object_or_404(Post, slug=slug)
     latest = Post.objects.order_by('-timestamp')[:3]
     
-    # Increment view count
-    post.view_count += 1
-    post.save(update_fields=['view_count'])
-    
-    # Check like/favourite status
-    is_liked = False
-    is_favourited = False
-    
     if request.user.is_authenticated:
         is_liked = Like.objects.filter(user=request.user, post=post).exists()
         is_favourited = Favourite.objects.filter(user=request.user, post=post).exists()
@@ -59,6 +51,44 @@ def post(request, slug):
         'comments': comments,
     }
     return render(request, 'post.html', context)
+
+def post_detail(request, pk):
+    """
+    Detailed post view with comments, likes, and favourites
+    This is the new interactive post page
+    """
+    post = get_object_or_404(Post, pk=pk)
+    
+    # Increment view count
+    post.view_count += 1
+    post.save(update_fields=['view_count'])
+    
+    # Check if user has liked or favourited
+    is_liked = False
+    is_favourited = False
+    
+    if request.user.is_authenticated:
+        is_liked = Like.objects.filter(user=request.user, post=post).exists()
+        is_favourited = Favourite.objects.filter(user=request.user, post=post).exists()
+    
+    # Get all comments for this post
+    comments = post.comments.all().order_by('-created_at')
+    
+    # Get counts
+    like_count = post.like_set.count()
+    favourite_count = post.favourite_set.count()
+    
+    context = {
+        'post': post,
+        'is_liked': is_liked,
+        'is_favourited': is_favourited,
+        'like_count': like_count,
+        'favourite_count': favourite_count,
+        'comments': comments,
+    }
+    
+    return render(request, 'post.html', context)
+
 
 
 def about(request):
@@ -103,44 +133,6 @@ def allposts(request):
         'posts': posts,
     }
     return render(request, 'all_posts.html', context)
-
-
-def post_detail(request, pk):
-    """
-    Detailed post view with comments, likes, and favourites
-    This is the new interactive post page
-    """
-    post = get_object_or_404(Post, pk=pk)
-    
-    # Increment view count
-    post.view_count += 1
-    post.save(update_fields=['view_count'])
-    
-    # Check if user has liked or favourited
-    is_liked = False
-    is_favourited = False
-    
-    if request.user.is_authenticated:
-        is_liked = Like.objects.filter(user=request.user, post=post).exists()
-        is_favourited = Favourite.objects.filter(user=request.user, post=post).exists()
-    
-    # Get all comments for this post
-    comments = post.comments.all().order_by('-created_at')
-    
-    # Get counts
-    like_count = post.like_set.count()
-    favourite_count = post.favourite_set.count()
-    
-    context = {
-        'post': post,
-        'is_liked': is_liked,
-        'is_favourited': is_favourited,
-        'like_count': like_count,
-        'favourite_count': favourite_count,
-        'comments': comments,
-    }
-    
-    return render(request, 'posts/post_detail.html', context)
 
 
 @login_required
